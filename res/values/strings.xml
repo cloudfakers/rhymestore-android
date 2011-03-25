@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rhymestore</string>
+    
+    <!-- ListRhymesActivity -->
+    <string name="listrhymes_name">Rhymes List</string>
+    <string name="validate_btn">Add</string>
+
+    
+    <!-- AddRhymesActivity -->
+    <string name="addrhymes_name">Add a new rhyme</string>
+    <string name="menu_add">Add</string>
+</resources>
