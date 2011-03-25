@@ -13,14 +13,14 @@ public final class R {
     public static final class drawable {
         public static final int icon=0x7f020000;
         public static final int menu_add=0x7f020001;
+        public static final int splashscreen_logo=0x7f020002;
     }
     public static final class id {
         public static final int SplashScreen=0x7f060004;
         public static final int list_rhymes=0x7f060002;
         public static final int logoImageView=0x7f060005;
-        public static final int menu_add=0x7f060007;
+        public static final int menu_add=0x7f060006;
         public static final int rhymes_edt=0x7f060000;
-        public static final int titleImageView=0x7f060006;
         public static final int toptext=0x7f060003;
         public static final int validate_btn=0x7f060001;
     }
