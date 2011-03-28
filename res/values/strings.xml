@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Rhymestore</string>
+    <string name="login_name">Rhymestore | Login</string>
+    <string name="home_name">Rhymestore | Home</string>
     
-    <!-- ListRhymesActivity -->
+    <!-- Login Activity -->
+    <string name="loginEditText"></string>
+    <string name="loginTextView">User</string>
+    <string name="passEditText"></string>
+    <string name="passTextView">Password</string>
+    <string name="rememberCheckbox">Remember password</string>
+    <string name="connexionButton">Accept</string>
+    
+    <!-- Home Activity -->
+    <string name="menu_list">List</string>
+    
+    <!-- List Rhymes Activity -->
     <string name="listrhymes_name">Rhymes List</string>
-    <string name="validate_btn">Add</string>
-
-    
-    <!-- AddRhymesActivity -->
-    <string name="addrhymes_name">Add a new rhyme</string>
     <string name="menu_add">Add</string>
+    
+    <!-- Add Rhymes Activity -->
+    <string name="addrhymes_name">Add a new rhyme</string>
+    <string name="validate_btn">Add</string>
 </resources>

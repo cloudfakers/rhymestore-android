@@ -4,6 +4,10 @@ public class Rhyme
 {
     private String text;
 
+    public Rhyme()
+    {
+    }
+
     public Rhyme(final String text)
     {
         setText(text);

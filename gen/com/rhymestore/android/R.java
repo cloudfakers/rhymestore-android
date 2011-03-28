@@ -12,36 +12,73 @@ public final class R {
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
-        public static final int menu_add=0x7f020001;
-        public static final int splashscreen_logo=0x7f020002;
+        public static final int login_button=0x7f020001;
+        public static final int login_button_default=0x7f020002;
+        public static final int login_button_pressed=0x7f020003;
+        public static final int login_checkbox=0x7f020004;
+        public static final int login_checkbox_off=0x7f020005;
+        public static final int login_checkbox_on=0x7f020006;
+        public static final int login_textinput=0x7f020007;
+        public static final int menu_add=0x7f020008;
+        public static final int splashscreen_logo=0x7f020009;
+        public static final int titlebar_background=0x7f02000a;
     }
     public static final class id {
-        public static final int SplashScreen=0x7f060004;
-        public static final int list_rhymes=0x7f060002;
-        public static final int logoImageView=0x7f060005;
-        public static final int menu_add=0x7f060006;
+        public static final int SplashScreen=0x7f060010;
+        public static final int connexionImageButton=0x7f06000e;
+        public static final int content_home=0x7f060004;
+        public static final int edit_login=0x7f060009;
+        public static final int edit_pass=0x7f06000b;
+        public static final int list_rhymes=0x7f060006;
+        public static final int login_button=0x7f06000d;
+        public static final int login_frame=0x7f060007;
+        public static final int logoImageView=0x7f060011;
+        public static final int menu_add=0x7f060013;
+        public static final int menu_list=0x7f060012;
+        public static final int rememberCheckbox=0x7f06000c;
         public static final int rhymes_edt=0x7f060000;
-        public static final int toptext=0x7f060003;
+        public static final int stretchableColumn=0x7f060003;
+        public static final int test=0x7f060005;
+        public static final int text_login=0x7f060008;
+        public static final int text_pass=0x7f06000a;
+        public static final int title_bar=0x7f060002;
+        public static final int toptext=0x7f06000f;
         public static final int validate_btn=0x7f060001;
     }
     public static final class layout {
         public static final int add_rhymes=0x7f030000;
-        public static final int list_rhymes=0x7f030001;
-        public static final int rhyme_itemlist=0x7f030002;
-        public static final int splashscreen=0x7f030003;
+        public static final int home=0x7f030001;
+        public static final int list_rhymes=0x7f030002;
+        public static final int login=0x7f030003;
+        public static final int rhyme_itemlist=0x7f030004;
+        public static final int splashscreen=0x7f030005;
     }
     public static final class menu {
-        public static final int list_rhymes_menu=0x7f050000;
+        public static final int home_menu=0x7f050000;
+        public static final int list_rhymes_menu=0x7f050001;
     }
     public static final class string {
-        /**  AddRhymesActivity 
+        /**  Add Rhymes Activity 
          */
-        public static final int addrhymes_name=0x7f040003;
+        public static final int addrhymes_name=0x7f04000c;
         public static final int app_name=0x7f040000;
-        /**  ListRhymesActivity 
+        public static final int connexionButton=0x7f040008;
+        public static final int home_name=0x7f040002;
+        /**  List Rhymes Activity 
          */
-        public static final int listrhymes_name=0x7f040001;
-        public static final int menu_add=0x7f040004;
-        public static final int validate_btn=0x7f040002;
+        public static final int listrhymes_name=0x7f04000a;
+        /**  Login Activity 
+         */
+        public static final int loginEditText=0x7f040003;
+        public static final int loginTextView=0x7f040004;
+        public static final int login_name=0x7f040001;
+        public static final int menu_add=0x7f04000b;
+        /**  Home Activity 
+         */
+        public static final int menu_list=0x7f040009;
+        public static final int passEditText=0x7f040005;
+        public static final int passTextView=0x7f040006;
+        public static final int rememberCheckbox=0x7f040007;
+        public static final int validate_btn=0x7f04000d;
     }
 }

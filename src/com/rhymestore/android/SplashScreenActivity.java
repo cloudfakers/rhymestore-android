@@ -42,7 +42,7 @@ public class SplashScreenActivity extends Activity
                 finally
                 {
                     // Once the thread is finish, call next activity
-                    startActivity(new Intent(SplashScreenActivity.this, ListRhymesActivity.class));
+                    startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
 
                     // Close current activity
                     finish();

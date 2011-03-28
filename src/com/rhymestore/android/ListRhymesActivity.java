@@ -1,6 +1,17 @@
 package com.rhymestore.android;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,7 +24,11 @@ import android.widget.ListView;
 
 public class ListRhymesActivity extends Activity
 {
+    /** Contains the list of all rhymes */
     private ArrayList<Rhyme> listRhymes;
+
+    /** The API URL */
+    private String urlApi = "http://10.60.1.222:8888/rhymestore/web/api";
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
@@ -21,12 +36,9 @@ public class ListRhymesActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_rhymes);
 
+        // Get all the rhymes performing a GET request to the API
         listRhymes = new ArrayList<Rhyme>();
-        listRhymes.add(new Rhyme("A empicharte ya estoy presto"));
-        listRhymes.add(new Rhyme("A tu culo le declaro la guerra"));
-        listRhymes.add(new Rhyme("Abracadabra tápate guarra"));
-        listRhymes.add(new Rhyme("Agáchate que te la meto de lado"));
-        listRhymes.add(new Rhyme("Agáchate que te vacuno"));
+        listRhymes = getListRhymes();
 
         // Prepare the ListView
         ListView list = (ListView) findViewById(R.id.list_rhymes);
@@ -55,5 +67,78 @@ public class ListRhymesActivity extends Activity
         }
 
         return false;
+    }
+
+    /**
+     * Performs a GET request to the API and retrieves the list of all the rhymes
+     * 
+     * @return A ArrayList witch contains all the rhymes
+     */
+    private ArrayList<Rhyme> getListRhymes()
+    {
+        ArrayList<Rhyme> returnList = new ArrayList<Rhyme>();
+
+        try
+        {
+            // Connect to the API
+            URL u = new URL(getUrlApi());
+            InputStream in = u.openStream();
+            InputSource ipsrc = new InputSource(in);
+
+            // Parse the XML
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(ipsrc);
+            doc.getDocumentElement().normalize();
+
+            // Manage results from the XML to get the rhymes
+            NodeList nList = doc.getElementsByTagName("rhyme");
+
+            for (int temp = 0; temp < nList.getLength(); temp++)
+            {
+                Node nNode = nList.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE)
+                {
+                    Element eElement = (Element) nNode;
+
+                    String currentValue = getTagValue("rhyme", eElement);
+                    if (currentValue != null)
+                    {
+                        returnList.add(new Rhyme(currentValue));
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
+
+        return returnList;
+    }
+
+    /**
+     * Get the tag value of the current rhyme
+     * 
+     * @param tag Name of the tag
+     * @param element Element to check
+     * @return Value of the tag
+     */
+    private static String getTagValue(final String tag, final Element element)
+    {
+        NodeList nlList = element.getElementsByTagName(tag).item(0).getChildNodes();
+        Node nValue = nlList.item(0);
+
+        return nValue.getNodeValue();
+    }
+
+    public void setUrlApi(final String url_api)
+    {
+        this.urlApi = url_api;
+    }
+
+    public String getUrlApi()
+    {
+        return urlApi;
     }
 }

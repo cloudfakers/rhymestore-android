@@ -17,6 +17,16 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".LoginActivity"
+        		  android:theme="@android:style/Theme.NoTitleBar"
+                  android:label="@string/login_name">
+        </activity>
+
+        <activity android:name=".HomeActivity"
+        		  android:theme="@android:style/Theme.NoTitleBar"
+                  android:label="@string/home_name">
+        </activity>
+
         <activity android:name=".ListRhymesActivity"
         		  android:theme="@android:style/Theme.NoTitleBar"
                   android:label="@string/listrhymes_name">
