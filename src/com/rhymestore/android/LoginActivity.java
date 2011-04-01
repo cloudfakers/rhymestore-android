@@ -40,6 +40,7 @@ public class LoginActivity extends Activity
                 if (connexionUser() == true)
                 {
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
                 }
             }
         });

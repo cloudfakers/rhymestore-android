@@ -1,11 +1,14 @@
 package com.rhymestore.android;
 
+import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity
 {
@@ -14,6 +17,15 @@ public class HomeActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+        AccountAuthentication twitterAuth = new AccountAuthentication(this);
+        Account[] accountsList = twitterAuth.getAccountsList();
+        shortAlert("Nombre : " + accountsList.length);
+
+        for (Account currentAccount : accountsList)
+        {
+            Log.d("Rhymes", "KIKOO: " + currentAccount.name);
+        }
     }
 
     @Override
@@ -37,4 +49,8 @@ public class HomeActivity extends Activity
         return false;
     }
 
+    private void shortAlert(final String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 }

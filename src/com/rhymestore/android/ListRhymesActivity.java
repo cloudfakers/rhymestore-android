@@ -21,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class ListRhymesActivity extends Activity
 {
@@ -40,12 +41,22 @@ public class ListRhymesActivity extends Activity
         listRhymes = new ArrayList<Rhyme>();
         listRhymes = getListRhymes();
 
-        // Prepare the ListView
-        ListView list = (ListView) findViewById(R.id.list_rhymes);
-        ListAdapter mAdapter = new ListRhymesAdapter(this, listRhymes);
-        list.setAdapter(mAdapter);
+        if (listRhymes != null)
+        {
+            // Prepare the ListView
+            ListView list = (ListView) findViewById(R.id.list_rhymes);
+            ListAdapter mAdapter = new ListRhymesAdapter(this, listRhymes);
+            list.setAdapter(mAdapter);
 
-        registerForContextMenu(list);
+            registerForContextMenu(list);
+        }
+        else
+        {
+            // Close this activity
+            finish();
+
+            longAlert("Sorry ! An error has occured, the application could not get the rhymes list.");
+        }
     }
 
     @Override
@@ -141,4 +152,15 @@ public class ListRhymesActivity extends Activity
     {
         return urlApi;
     }
+
+    private void shortAlert(final String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void longAlert(final String msg)
+    {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+    }
+
 }
