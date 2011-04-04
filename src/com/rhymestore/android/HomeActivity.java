@@ -1,6 +1,6 @@
 package com.rhymestore.android;
 
-import com.rhymestore.android.authenticator.TwitterAuthentication;
+import com.rhymestore.android.accountsmanager.TwitterAccountManager;
 import com.rhymestore.android.rhymes.ListRhymesActivity;
 
 import android.accounts.Account;
@@ -21,7 +21,7 @@ public class HomeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-        TwitterAuthentication twitterAuth = new TwitterAuthentication(this);
+        TwitterAccountManager twitterAuth = new TwitterAccountManager(this);
         Account[] accountsList = twitterAuth.getAccountsList();
         shortAlert("Nombre : " + accountsList.length);
 

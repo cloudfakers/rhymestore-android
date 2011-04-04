@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.rhymestore.android.authenticator.TwitterAuthentication;
+import com.rhymestore.android.accountsmanager.TwitterAccountManager;
 
 public class SplashScreenActivity extends Activity
 {
@@ -58,9 +58,9 @@ public class SplashScreenActivity extends Activity
 
     private void twitterAuthentication()
     {
-        TwitterAuthentication twitterAuth = new TwitterAuthentication(this);
+        TwitterAccountManager twitterAuth = new TwitterAccountManager(this);
 
-        if (twitterAuth.checkExisitingAccount() == true)
+        if (twitterAuth.checkExisitingAccount() == false)
         {
             // Account exists, try to log in
 

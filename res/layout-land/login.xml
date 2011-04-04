@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@drawable/login_background_image">
+	
+	<LinearLayout
+		android:layout_weight="1"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+		
+		<TableLayout
+			android:id="@+id/login_frame"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:stretchColumns="1"
+			android:background="@drawable/login_frame">
+			
+			<TableRow>
+			
+				<LinearLayout
+					android:id="@+id/twitter_info"
+					android:layout_span="3"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent"
+					android:gravity="center">
+					
+					<TextView
+						android:id="@+id/text_twitter"
+						android:text="@string/twitterTextView"
+						android:drawableLeft="@drawable/icon_twitter_small"
+						android:padding="5dip"
+						android:adjustViewBounds="true"
+						android:scaleType="fitXY"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_gravity="top"
+						android:textStyle="italic"
+						android:textColor="#000000"
+						android:textSize="14sp"
+						android:layout_marginLeft="1dip"/>
+					
+				</LinearLayout>
+				
+			</TableRow>
+			<TableRow android:layout_marginTop="5dip">
+				<TextView
+					android:id="@+id/text_login"
+					android:text="@string/loginTextView"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="top"
+					android:textColor="#59625f"
+					android:textSize="14sp"
+					android:layout_marginBottom="5dip"/>
+					
+				<EditText
+					android:id="@+id/edit_login"
+					android:layout_toRightOf="@+id/text_login"
+					android:text="test"
+					android:maxLines="1"
+					android:singleLine="true"
+					android:textSize="13sp"
+					android:background="@drawable/login_textinput"
+					android:layout_marginLeft="10dip"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"/>
+
+			</TableRow>
+			<TableRow android:layout_marginTop="8dip">
+				<TextView
+					android:id="@+id/text_pass"
+					android:layout_below="@+id/edit_login"
+					android:text="@string/passTextView"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="top"
+					android:textColor="#59625f"
+					android:textSize="14sp"
+					android:layout_marginBottom="5dip"/>
+					
+				<EditText
+					android:id="@+id/edit_pass"
+					android:layout_below="@+id/edit_login"
+					android:layout_toRightOf="@+id/text_pass"
+					android:password="true"
+					android:text="test"
+					android:maxLines="1"
+					android:singleLine="true"
+					android:textSize="13sp"
+					android:background="@drawable/login_textinput"
+					android:layout_marginLeft="10dip"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"/>
+			</TableRow>
+			<TableRow>
+				<CheckBox
+					android:id="@+id/rememberCheckbox"
+					android:layout_span="3"
+					android:text="@string/rememberCheckbox"
+					android:textColor="#59625f"
+					android:textSize="14sp"
+					android:button="@drawable/login_checkbox"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="2dip"
+					android:layout_below="@+id/edit_pass" />
+			</TableRow>
+			
+			<RelativeLayout
+				android:id="@+id/login_button"
+				android:gravity="center_horizontal|bottom"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent">
+				
+				<ImageButton
+					android:id="@+id/connexionImageButton"
+					android:background="#FFFFFF"
+					android:src="@drawable/login_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" />
+					
+			</RelativeLayout>
+			
+		</TableLayout>
+
+	</LinearLayout>
+	
+</LinearLayout>

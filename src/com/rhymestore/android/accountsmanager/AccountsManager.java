@@ -41,11 +41,10 @@ public abstract class AccountsManager implements AccountsManagerFacade
     public boolean checkExisitingAccount()
     {
         Account[] accountsList = getAccountsList();
-        Account[] requestedAccount = getAccountManager().getAccountsByType(getAccountType());
 
         for (Account currentAccount : accountsList)
         {
-            if (currentAccount == requestedAccount[0])
+            if (currentAccount.type.equals(getAccountType()))
             {
                 return true;
             }

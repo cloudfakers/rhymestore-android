@@ -5,6 +5,7 @@
     <string name="home_name">Rhymestore | Home</string>
     
     <!-- Login Activity -->
+    <string name="twitterTextView">Use your Twitter account</string>
     <string name="loginEditText"></string>
     <string name="loginTextView">User</string>
     <string name="passEditText"></string>
