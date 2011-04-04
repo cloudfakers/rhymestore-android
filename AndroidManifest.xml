@@ -27,18 +27,31 @@
                   android:label="@string/home_name">
         </activity>
 
-        <activity android:name=".ListRhymesActivity"
+        <activity android:name="rhymes.ListRhymesActivity"
         		  android:theme="@android:style/Theme.NoTitleBar"
                   android:label="@string/listrhymes_name">
         </activity>
 
-        <activity android:name=".AddRhymesActivity"
+        <activity android:name="rhymes.AddRhymesActivitytivity"
 				  android:theme="@android:style/Theme.NoTitleBar"
         		  android:label="@string/addrhymes_name">
         </activity>
+        
+        <service android:name="authenticator.AccountAuthenticatorService"
+				 android:exported="true" android:process=":auth">
+			<intent-filter>
+				<action android:name="android.accounts.AccountAuthenticator" />
+			</intent-filter>
+			<meta-data android:name="android.accounts.AccountAuthenticator"
+					   android:resource="@xml/authenticator" />
+		</service>
+		
     </application>
     
-	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-	<uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+	<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 	
 </manifest>

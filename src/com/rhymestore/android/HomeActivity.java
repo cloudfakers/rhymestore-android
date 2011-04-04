@@ -1,5 +1,8 @@
 package com.rhymestore.android;
 
+import com.rhymestore.android.authenticator.TwitterAuthentication;
+import com.rhymestore.android.rhymes.ListRhymesActivity;
+
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
@@ -18,7 +21,7 @@ public class HomeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-        AccountAuthentication twitterAuth = new AccountAuthentication(this);
+        TwitterAuthentication twitterAuth = new TwitterAuthentication(this);
         Account[] accountsList = twitterAuth.getAccountsList();
         shortAlert("Nombre : " + accountsList.length);
 
@@ -26,6 +29,9 @@ public class HomeActivity extends Activity
         {
             Log.d("Rhymes", "KIKOO: " + currentAccount.name);
         }
+
+        // Account account = new Account(username, getString(R.string.ACCOUNT_TYPE)));
+        // twitterAuth.createAccount(account);
     }
 
     @Override

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.rhymestore.android.authenticator.TwitterAuthentication;
+
 public class SplashScreenActivity extends Activity
 {
     /** SplashScreen display time (in ms) **/
@@ -42,7 +44,7 @@ public class SplashScreenActivity extends Activity
                 finally
                 {
                     // Once the thread is finish, call next activity
-                    startActivity(new Intent(SplashScreenActivity.this, HomeActivity.class));
+                    twitterAuthentication();
 
                     // Close current activity
                     finish();
@@ -52,6 +54,24 @@ public class SplashScreenActivity extends Activity
 
         // Start SplashScreen thread
         welcomeThread.start();
+    }
+
+    private void twitterAuthentication()
+    {
+        TwitterAuthentication twitterAuth = new TwitterAuthentication(this);
+
+        if (twitterAuth.checkExisitingAccount() == true)
+        {
+            // Account exists, try to log in
+
+            // Launch Home activity
+            startActivity(new Intent(SplashScreenActivity.this, HomeActivity.class));
+        }
+        else
+        {
+            // Account does not exist, launch Login activity
+            startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+        }
     }
 
     private void alert(final String msg)

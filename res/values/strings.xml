@@ -11,6 +11,7 @@
     <string name="passTextView">Password</string>
     <string name="rememberCheckbox">Remember password</string>
     <string name="connexionButton">Accept</string>
+    <string name="authenticatorName">Twitter</string>
     
     <!-- Home Activity -->
     <string name="menu_list">List</string>

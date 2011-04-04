@@ -1,5 +1,7 @@
 package com.rhymestore.android;
 
+import com.rhymestore.android.configuration.Preferences;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -113,13 +115,13 @@ public class LoginActivity extends Activity
      */
     private void matchPreferences()
     {
-        SharedPreferences config = getSharedPreferences(Configuration.PREFS_NAME, 0);
+        SharedPreferences config = getSharedPreferences(Preferences.PREFS_NAME, 0);
 
         // Get the preferences of the login form
-        String loginPrefUser = config.getString(Configuration.PREFS_PREFIX_KEY + "login", null);
-        String passPrefuser = config.getString(Configuration.PREFS_PREFIX_KEY + "pass", null);
+        String loginPrefUser = config.getString(Preferences.PREFS_PREFIX_KEY + "login", null);
+        String passPrefuser = config.getString(Preferences.PREFS_PREFIX_KEY + "pass", null);
         Boolean rememberPrefUser =
-            config.getBoolean(Configuration.PREFS_PREFIX_KEY + "remember", false);
+            config.getBoolean(Preferences.PREFS_PREFIX_KEY + "remember", false);
 
         // Match the datas of the SharedPreferences to the form
         EditText loginEditText = (EditText) findViewById(R.id.edit_login);
@@ -141,11 +143,11 @@ public class LoginActivity extends Activity
     private void savePreferences(final String login, final String pass, final boolean remember)
     {
         SharedPreferences.Editor prefs =
-            this.getSharedPreferences(Configuration.PREFS_NAME, 0).edit();
+            this.getSharedPreferences(Preferences.PREFS_NAME, 0).edit();
 
-        prefs.putString(Configuration.PREFS_PREFIX_KEY + "login", login);
-        prefs.putString(Configuration.PREFS_PREFIX_KEY + "pass", pass);
-        prefs.putBoolean(Configuration.PREFS_PREFIX_KEY + "remember", remember);
+        prefs.putString(Preferences.PREFS_PREFIX_KEY + "login", login);
+        prefs.putString(Preferences.PREFS_PREFIX_KEY + "pass", pass);
+        prefs.putBoolean(Preferences.PREFS_PREFIX_KEY + "remember", remember);
 
         prefs.commit();
     }
@@ -155,12 +157,12 @@ public class LoginActivity extends Activity
      */
     private void deletePreferences()
     {
-        SharedPreferences config = getSharedPreferences(Configuration.PREFS_NAME, 0);
+        SharedPreferences config = getSharedPreferences(Preferences.PREFS_NAME, 0);
         SharedPreferences.Editor edit = config.edit();
 
-        edit.remove(Configuration.PREFS_PREFIX_KEY + "login");
-        edit.remove(Configuration.PREFS_PREFIX_KEY + "pass");
-        edit.remove(Configuration.PREFS_PREFIX_KEY + "remember");
+        edit.remove(Preferences.PREFS_PREFIX_KEY + "login");
+        edit.remove(Preferences.PREFS_PREFIX_KEY + "pass");
+        edit.remove(Preferences.PREFS_PREFIX_KEY + "remember");
 
         edit.commit();
     }
