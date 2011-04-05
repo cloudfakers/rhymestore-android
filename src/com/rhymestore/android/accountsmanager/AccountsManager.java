@@ -44,6 +44,18 @@ public abstract class AccountsManager implements AccountsManagerFacade
     public abstract Account addAccount(final Account account);
 
     /**
+     * Launch the web browser to get a response from Twitter Authentication
+     */
+    public abstract Boolean requestAuthentication() throws Exception;
+
+    /**
+     * Try to authenticate to a Twitter account using the Twitter Authentication response
+     * 
+     * @see requestAuthentication()
+     */
+    public abstract void tryAuthentication(String oAuthVerifier) throws Exception;
+
+    /**
      * Check if the requested account exists
      * 
      * @return if the account exists or not
@@ -62,8 +74,6 @@ public abstract class AccountsManager implements AccountsManagerFacade
 
         return false;
     }
-
-    public abstract boolean tryAuthentication();
 
     public void setAccountsList(final Account[] accountsList)
     {

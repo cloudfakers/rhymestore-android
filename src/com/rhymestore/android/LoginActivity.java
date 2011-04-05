@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -54,6 +55,20 @@ public class LoginActivity extends Activity
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        Uri uri = getIntent().getData();
+        String oauthVerifier = null;
+
+        if (uri != null)
+        {
+            oauthVerifier = uri.getQueryParameter("oauth_verifier");
+        }
+    }
+
+    @Override
     protected Dialog onCreateDialog(final int id)
     {
         if (id == DIALOG_LOADING_AUTH)
@@ -86,7 +101,15 @@ public class LoginActivity extends Activity
         @Override
         protected Boolean doInBackground(final URL... urls)
         {
-            return twitterAccountManager.tryAuthentication();
+            try
+            {
+                return twitterAccountManager.requestAuthentication();
+            }
+            catch (Exception ex)
+            {
+                alert("Error: " + ex.getMessage());
+                return false;
+            }
         }
 
         @Override
@@ -131,11 +154,13 @@ public class LoginActivity extends Activity
             }
 
             // Connect to Twitter
-            TwitterAuth twitterAuth = new TwitterAuth();
-            return twitterAuth.execute().get();
+            return twitterAccountManager.requestAuthentication();
+            // TwitterAuth twitterAuth = new TwitterAuth();
+            // return twitterAuth.execute().get();
         }
         catch (Exception ex)
         {
+            alert("Error:" + ex.getMessage());
             return false;
         }
     }

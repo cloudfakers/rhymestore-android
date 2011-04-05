@@ -1,10 +1,9 @@
 package com.rhymestore.android.rhymes;
 
-import com.rhymestore.android.R;
-import com.rhymestore.android.R.layout;
-
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.rhymestore.android.R;
 
 public class AddRhymesActivity extends Activity
 {

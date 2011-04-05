@@ -13,11 +13,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.rhymestore.android.R;
-import com.rhymestore.android.R.id;
-import com.rhymestore.android.R.layout;
-import com.rhymestore.android.R.menu;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +22,8 @@ import android.view.MenuItem;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.rhymestore.android.R;
 
 public class ListRhymesActivity extends Activity
 {

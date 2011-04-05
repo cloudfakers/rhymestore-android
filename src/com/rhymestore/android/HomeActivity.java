@@ -1,8 +1,5 @@
 package com.rhymestore.android;
 
-import com.rhymestore.android.accountsmanager.TwitterAccountManager;
-import com.rhymestore.android.rhymes.ListRhymesActivity;
-
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.rhymestore.android.accountsmanager.TwitterAccountManager;
+import com.rhymestore.android.rhymes.ListRhymesActivity;
 
 public class HomeActivity extends Activity
 {

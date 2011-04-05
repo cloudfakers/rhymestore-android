@@ -20,6 +20,13 @@
         <activity android:name=".LoginActivity"
         		  android:theme="@android:style/Theme.NoTitleBar"
                   android:label="@string/login_name">
+                  
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+				<data android:scheme="rhymestore"/>
+			</intent-filter>
         </activity>
 
         <activity android:name=".HomeActivity"

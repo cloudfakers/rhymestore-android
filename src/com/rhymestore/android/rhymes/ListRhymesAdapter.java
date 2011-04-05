@@ -2,10 +2,6 @@ package com.rhymestore.android.rhymes;
 
 import java.util.List;
 
-import com.rhymestore.android.R;
-import com.rhymestore.android.R.id;
-import com.rhymestore.android.R.layout;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -13,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.rhymestore.android.R;
 
 public class ListRhymesAdapter extends BaseAdapter
 {
