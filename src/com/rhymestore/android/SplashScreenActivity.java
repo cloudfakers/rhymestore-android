@@ -3,6 +3,7 @@ package com.rhymestore.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.rhymestore.android.accountsmanager.TwitterAccountManager;
@@ -11,6 +12,8 @@ public class SplashScreenActivity extends Activity
 {
     /** SplashScreen display time (in ms) **/
     private final int welcomeScreenDisplay = 3000;
+
+    private Thread mAuthThread;
 
     /** Called when the activity is first created. */
     @Override
@@ -60,9 +63,14 @@ public class SplashScreenActivity extends Activity
     {
         TwitterAccountManager twitterAuth = new TwitterAccountManager(this);
 
-        if (twitterAuth.checkExisitingAccount() == false)
+        if (twitterAuth.checkExisitingAccount() == true)
         {
             // Account exists, try to log in
+            EditText userLoginEditText = (EditText) findViewById(R.id.edit_login);
+            EditText userPassEditText = (EditText) findViewById(R.id.edit_pass);
+
+            String userName = userLoginEditText.getText().toString();
+            String userPass = userPassEditText.getText().toString();
 
             // Launch Home activity
             startActivity(new Intent(SplashScreenActivity.this, HomeActivity.class));

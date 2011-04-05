@@ -4,5 +4,7 @@ import android.accounts.Account;
 
 public interface AccountsManagerFacade
 {
-    public abstract Account createAccount(final Account account);
+    public abstract Account addAccount(final Account account);
+
+    public abstract boolean tryAuthentication();
 }

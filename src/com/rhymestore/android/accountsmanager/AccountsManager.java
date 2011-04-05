@@ -20,6 +20,8 @@ public abstract class AccountsManager implements AccountsManagerFacade
 
     private Account requiredAccount;
 
+    private static final int DIALOG_LOADING_AUTH = 0;
+
     public AccountsManager(final Context context, final String consumerKey,
         final String consumerSecret, final String accountType)
     {
@@ -36,8 +38,16 @@ public abstract class AccountsManager implements AccountsManagerFacade
         setAccountsList(getAccountManager().getAccountsByType(null));
     }
 
-    public abstract Account createAccount(final Account account);
+    /**
+     * Add a new account in the AccountManager
+     */
+    public abstract Account addAccount(final Account account);
 
+    /**
+     * Check if the requested account exists
+     * 
+     * @return if the account exists or not
+     */
     public boolean checkExisitingAccount()
     {
         Account[] accountsList = getAccountsList();
@@ -52,6 +62,8 @@ public abstract class AccountsManager implements AccountsManagerFacade
 
         return false;
     }
+
+    public abstract boolean tryAuthentication();
 
     public void setAccountsList(final Account[] accountsList)
     {

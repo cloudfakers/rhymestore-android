@@ -1,11 +1,14 @@
 package com.rhymestore.android;
 
-import com.rhymestore.android.configuration.Preferences;
+import java.net.URL;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,23 +18,22 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rhymestore.android.accountsmanager.TwitterAccountManager;
+import com.rhymestore.android.configuration.Preferences;
+
 public class LoginActivity extends Activity
 {
+    private static final int DIALOG_LOADING_AUTH = 0;
+
+    private TwitterAccountManager twitterAccountManager;
+
     @Override
     public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        // Set the font of the TextView and EditText
-        // EditText edit_login = (EditText) findViewById(R.id.edit_login);
-        // this.setFont(edit_login, "arial");
-        // EditText edit_pass = (EditText) findViewById(R.id.edit_pass);
-        // this.setFont(edit_pass, "arial");
-        // TextView text_login = (TextView) findViewById(R.id.text_login);
-        // this.setFont(text_login, "arial");
-        // TextView text_pass = (TextView) findViewById(R.id.text_pass);
-        // this.setFont(text_pass, "arial");
+        twitterAccountManager = new TwitterAccountManager(this);
 
         // Handle event on connexion button
         ImageButton connexionImageButton = (ImageButton) findViewById(R.id.connexionImageButton);
@@ -49,6 +51,112 @@ public class LoginActivity extends Activity
 
         // Get user SharedPreferences and match the datas
         matchPreferences();
+    }
+
+    @Override
+    protected Dialog onCreateDialog(final int id)
+    {
+        if (id == DIALOG_LOADING_AUTH)
+        {
+            ProgressDialog dialog = new ProgressDialog(this);
+            dialog.setTitle("Twitter Authentication");
+            dialog.setMessage("Please wait why authenticating to your Twitter account...");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(true);
+
+            return dialog;
+        }
+
+        return null;
+    }
+
+    /**
+     * Thread to manage the Twitter Authentication using a loading dialog
+     * 
+     * @author vmahe
+     */
+    private class TwitterAuth extends AsyncTask<URL, Integer, Boolean>
+    {
+        @Override
+        protected void onPreExecute()
+        {
+            showDialog(DIALOG_LOADING_AUTH);
+        }
+
+        @Override
+        protected Boolean doInBackground(final URL... urls)
+        {
+            return twitterAccountManager.tryAuthentication();
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean bool)
+        {
+            dismissDialog(DIALOG_LOADING_AUTH);
+        }
+    }
+
+    /**
+     * Try to connect the user to his Twitter account
+     * 
+     * @return if the connexion is successful or failed
+     */
+    private boolean connexionUser()
+    {
+        try
+        {
+            // Check the validity of the fields
+            EditText et_login = (EditText) findViewById(R.id.edit_login);
+            EditText et_pass = (EditText) findViewById(R.id.edit_pass);
+            CheckBox cb_remember = (CheckBox) findViewById(R.id.rememberCheckbox);
+
+            String user_login = et_login.getText().toString();
+            String user_pass = et_pass.getText().toString();
+            boolean user_remember = cb_remember.isChecked();
+
+            if (user_login.equals("") || user_pass.equals(""))
+            {
+                alert("Error: Please fill all fields !");
+                return false;
+            }
+
+            // Sauvegarder les préférences de l'utilisateur s'il coche "Mémoriser le login"
+            if (user_remember == true)
+            {
+                savePreferences(user_login, user_pass, user_remember);
+            }
+            else
+            {
+                deletePreferences();
+            }
+
+            // Connect to Twitter
+            TwitterAuth twitterAuth = new TwitterAuth();
+            return twitterAuth.execute().get();
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Set font to all EditText and TextView
+     */
+    private void setAllFont()
+    {
+        // Set the font of the TextView and EditText
+        EditText edit_login = (EditText) findViewById(R.id.edit_login);
+        this.setFont(edit_login, "arial");
+
+        EditText edit_pass = (EditText) findViewById(R.id.edit_pass);
+        this.setFont(edit_pass, "arial");
+
+        TextView text_login = (TextView) findViewById(R.id.text_login);
+        this.setFont(text_login, "arial");
+
+        TextView text_pass = (TextView) findViewById(R.id.text_pass);
+        this.setFont(text_pass, "arial");
     }
 
     /**
@@ -75,39 +183,6 @@ public class LoginActivity extends Activity
         String textViewFont = "fonts/" + font + ".ttf";
         Typeface tf = Typeface.createFromAsset(getAssets(), textViewFont);
         editText.setTypeface(tf);
-    }
-
-    private boolean connexionUser()
-    {
-        // Check the validity of the fields
-        EditText et_login = (EditText) findViewById(R.id.edit_login);
-        EditText et_pass = (EditText) findViewById(R.id.edit_pass);
-        CheckBox cb_remember = (CheckBox) findViewById(R.id.rememberCheckbox);
-
-        String user_login = et_login.getText().toString();
-        String user_pass = et_pass.getText().toString();
-        boolean user_remember = cb_remember.isChecked();
-
-        if (user_login.equals("") || user_pass.equals(""))
-        {
-            alert("Error: Please fill all fields !");
-            return false;
-        }
-
-        // Sauvegarder les préférences de l'utilisateur s'il coche "Mémoriser le login"
-        if (user_remember == true)
-        {
-            savePreferences(user_login, user_pass, user_remember);
-        }
-        else
-        {
-            deletePreferences();
-        }
-
-        // Connect to the database
-        alert("Connexion...");
-
-        return true;
     }
 
     /**
