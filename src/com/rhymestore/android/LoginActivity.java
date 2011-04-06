@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -42,10 +43,20 @@ public class LoginActivity extends Activity
         {
             public void onClick(final View v)
             {
-                if (connexionUser() == true)
+                // Check validity of the form
+                if (checkForm() == true)
                 {
-                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                    finish();
+                    // Connect to Twitter
+                    try
+                    {
+                        twitterAccountManager.requestAuthentication();
+                        // TwitterAuth twitterAuth = new TwitterAuth();
+                        // return twitterAuth.execute().get();
+                    }
+                    catch (Exception ex)
+                    {
+                        alert("Error:" + ex.getMessage());
+                    }
                 }
             }
         });
@@ -60,11 +71,29 @@ public class LoginActivity extends Activity
         super.onResume();
 
         Uri uri = getIntent().getData();
-        String oauthVerifier = null;
 
         if (uri != null)
         {
-            oauthVerifier = uri.getQueryParameter("oauth_verifier");
+            try
+            {
+                String oauthVerifier = uri.getQueryParameter("oauth_verifier");
+
+                // Try identification with feedback from the Twitter validation
+                if (twitterAccountManager.tryAuthentication(oauthVerifier) == true)
+                {
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                }
+                else
+                {
+                    alert("Error with Twitter authentication !");
+                }
+            }
+            catch (Exception ex)
+            {
+                alert("Error: " + ex.getMessage());
+                Log.d("RHYME", "HEY: " + ex.getMessage());
+            }
         }
     }
 
@@ -103,7 +132,8 @@ public class LoginActivity extends Activity
         {
             try
             {
-                return twitterAccountManager.requestAuthentication();
+                twitterAccountManager.requestAuthentication();
+                return true;
             }
             catch (Exception ex)
             {
@@ -124,45 +154,34 @@ public class LoginActivity extends Activity
      * 
      * @return if the connexion is successful or failed
      */
-    private boolean connexionUser()
+    private boolean checkForm()
     {
-        try
+        // Check the validity of the fields
+        EditText et_login = (EditText) findViewById(R.id.edit_login);
+        EditText et_pass = (EditText) findViewById(R.id.edit_pass);
+        CheckBox cb_remember = (CheckBox) findViewById(R.id.rememberCheckbox);
+
+        String user_login = et_login.getText().toString();
+        String user_pass = et_pass.getText().toString();
+        boolean user_remember = cb_remember.isChecked();
+
+        if (user_login.equals("") || user_pass.equals(""))
         {
-            // Check the validity of the fields
-            EditText et_login = (EditText) findViewById(R.id.edit_login);
-            EditText et_pass = (EditText) findViewById(R.id.edit_pass);
-            CheckBox cb_remember = (CheckBox) findViewById(R.id.rememberCheckbox);
-
-            String user_login = et_login.getText().toString();
-            String user_pass = et_pass.getText().toString();
-            boolean user_remember = cb_remember.isChecked();
-
-            if (user_login.equals("") || user_pass.equals(""))
-            {
-                alert("Error: Please fill all fields !");
-                return false;
-            }
-
-            // Sauvegarder les préférences de l'utilisateur s'il coche "Mémoriser le login"
-            if (user_remember == true)
-            {
-                savePreferences(user_login, user_pass, user_remember);
-            }
-            else
-            {
-                deletePreferences();
-            }
-
-            // Connect to Twitter
-            return twitterAccountManager.requestAuthentication();
-            // TwitterAuth twitterAuth = new TwitterAuth();
-            // return twitterAuth.execute().get();
-        }
-        catch (Exception ex)
-        {
-            alert("Error:" + ex.getMessage());
+            alert("Error: Please fill all fields !");
             return false;
         }
+
+        // Sauvegarder les préférences de l'utilisateur s'il coche "Mémoriser le login"
+        if (user_remember == true)
+        {
+            savePreferences(user_login, user_pass, user_remember);
+        }
+        else
+        {
+            deletePreferences();
+        }
+
+        return true;
     }
 
     /**

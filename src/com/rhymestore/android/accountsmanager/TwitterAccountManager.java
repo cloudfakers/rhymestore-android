@@ -20,9 +20,7 @@ public class TwitterAccountManager extends AccountsManager
 
     private static final String TWITTER_ACCOUNTMANAGER_TYPE = "com.twitter.android.auth.login";
 
-    private static final String TWITTER_CALLBACKURL = "rhymestore://HomeActivity";
-
-    private Twitter twitter = new TwitterFactory().getInstance();
+    private static final String TWITTER_CALLBACKURL = "rhymestore://LoginActivity";
 
     private RequestToken requestToken;
 
@@ -32,8 +30,6 @@ public class TwitterAccountManager extends AccountsManager
     {
         super(context, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCOUNTMANAGER_TYPE);
         this.context = context;
-
-        twitter.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
     }
 
     @Override
@@ -45,17 +41,19 @@ public class TwitterAccountManager extends AccountsManager
     }
 
     @Override
-    public Boolean requestAuthentication() throws Exception
+    public void requestAuthentication() throws Exception
     {
+        Twitter twitter = new TwitterFactory().getInstance();
+
         try
         {
+            twitter.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
             requestToken = twitter.getOAuthRequestToken(TWITTER_CALLBACKURL);
+            Log.d("RHYME", "requestToken: " + requestToken);
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(requestToken
                 .getAuthenticationURL())));
 
             Log.d("RHYME", "KIKOO: asking API");
-
-            return true;
         }
         catch (IllegalStateException ex)
         {
@@ -65,8 +63,6 @@ public class TwitterAccountManager extends AccountsManager
                 Log.d("RHYME", "OAuth consumer key/secret is not set.");
                 throw new Exception("Error: OAuth consumer key/secret is not set.");
             }
-
-            return false;
         }
         catch (Exception ex)
         {
@@ -76,21 +72,27 @@ public class TwitterAccountManager extends AccountsManager
     }
 
     @Override
-    public void tryAuthentication(final String oAuthVerifier) throws Exception
+    public Boolean tryAuthentication(final String oAuthVerifier) throws Exception
     {
         try
         {
-            requestToken = twitter.getOAuthRequestToken(TWITTER_CALLBACKURL);
-            AccessToken acessToken = twitter.getOAuthAccessToken(requestToken, oAuthVerifier);
-            String token = acessToken.getToken();
-            String secret = acessToken.getTokenSecret();
+            Twitter twitter2 = new TwitterFactory().getInstance();
+            twitter2.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+            Log.d("RHYME", "ici");
+            AccessToken accessToken = twitter2.getOAuthAccessToken(requestToken, oAuthVerifier);
+            String token = accessToken.getToken();
+            String secret = accessToken.getTokenSecret();
 
-            twitter.setOAuthAccessToken(new AccessToken(token, secret));
+            Twitter t = new TwitterFactory().getInstance();
+            t.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
+            t.setOAuthAccessToken(new AccessToken(token, secret));
             Log.d("RHYME", "KIKOO: logged");
+
+            return true;
         }
         catch (TwitterException ex)
         {
-            throw new Exception("Error: " + ex.getMessage());
+            throw new Exception("ErrorLOL: " + ex.getMessage());
         }
     }
 }

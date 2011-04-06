@@ -6,7 +6,7 @@ public interface AccountsManagerFacade
 {
     public abstract Account addAccount(final Account account);
 
-    public abstract Boolean requestAuthentication() throws Exception;
+    public abstract void requestAuthentication() throws Exception;
 
-    public abstract void tryAuthentication(String oAuthVerifier) throws Exception;
+    public abstract Boolean tryAuthentication(String oAuthVerifier) throws Exception;
 }
