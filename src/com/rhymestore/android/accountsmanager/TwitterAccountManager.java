@@ -9,7 +9,6 @@ import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 public class TwitterAccountManager extends AccountsManager
 {
@@ -20,16 +19,28 @@ public class TwitterAccountManager extends AccountsManager
 
     private static final String TWITTER_ACCOUNTMANAGER_TYPE = "com.twitter.android.auth.login";
 
-    private static final String TWITTER_CALLBACKURL = "rhymestore://LoginActivity";
+    private static final String TWITTER_CALLBACKURL = "rhymestore://twitter";
+
+    private static TwitterAccountManager instance;
 
     private RequestToken requestToken;
 
-    private Context context;
+    private static Context context;
 
     public TwitterAccountManager(final Context context)
     {
         super(context, TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, TWITTER_ACCOUNTMANAGER_TYPE);
         this.context = context;
+    }
+
+    public static TwitterAccountManager getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new TwitterAccountManager(context);
+        }
+
+        return instance;
     }
 
     @Override
@@ -49,25 +60,20 @@ public class TwitterAccountManager extends AccountsManager
         {
             twitter.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
             requestToken = twitter.getOAuthRequestToken(TWITTER_CALLBACKURL);
-            Log.d("RHYME", "requestToken: " + requestToken);
             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(requestToken
                 .getAuthenticationURL())));
-
-            Log.d("RHYME", "KIKOO: asking API");
         }
         catch (IllegalStateException ex)
         {
-            // access token is already available, or consumer key/secret is not set.
+            // Access token is already available, or consumer key/secret is not set.
             if (twitter.getAuthorization().isEnabled() == false)
             {
-                Log.d("RHYME", "OAuth consumer key/secret is not set.");
                 throw new Exception("Error: OAuth consumer key/secret is not set.");
             }
         }
         catch (Exception ex)
         {
-            Log.d("RHYME", "Exception: " + ex.getMessage());
-            throw new Exception("Exception: " + ex.getMessage());
+            throw new Exception("Error: " + ex.getMessage());
         }
     }
 
@@ -78,7 +84,6 @@ public class TwitterAccountManager extends AccountsManager
         {
             Twitter twitter2 = new TwitterFactory().getInstance();
             twitter2.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
-            Log.d("RHYME", "ici");
             AccessToken accessToken = twitter2.getOAuthAccessToken(requestToken, oAuthVerifier);
             String token = accessToken.getToken();
             String secret = accessToken.getTokenSecret();
@@ -86,13 +91,12 @@ public class TwitterAccountManager extends AccountsManager
             Twitter t = new TwitterFactory().getInstance();
             t.setOAuthConsumer(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
             t.setOAuthAccessToken(new AccessToken(token, secret));
-            Log.d("RHYME", "KIKOO: logged");
 
             return true;
         }
         catch (TwitterException ex)
         {
-            throw new Exception("ErrorLOL: " + ex.getMessage());
+            throw new Exception("Error: " + ex.getMessage());
         }
     }
 }

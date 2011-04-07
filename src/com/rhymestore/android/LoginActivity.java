@@ -1,7 +1,5 @@
 package com.rhymestore.android;
 
-import java.net.URL;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -9,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,15 +24,11 @@ public class LoginActivity extends Activity
 {
     private static final int DIALOG_LOADING_AUTH = 0;
 
-    private TwitterAccountManager twitterAccountManager;
-
     @Override
     public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-        twitterAccountManager = new TwitterAccountManager(this);
 
         // Handle event on connexion button
         ImageButton connexionImageButton = (ImageButton) findViewById(R.id.connexionImageButton);
@@ -44,14 +37,12 @@ public class LoginActivity extends Activity
             public void onClick(final View v)
             {
                 // Check validity of the form
-                if (checkForm() == true)
+                if (validForm() == true)
                 {
                     // Connect to Twitter
                     try
                     {
-                        twitterAccountManager.requestAuthentication();
-                        // TwitterAuth twitterAuth = new TwitterAuth();
-                        // return twitterAuth.execute().get();
+                        TwitterAccountManager.getInstance().requestAuthentication();
                     }
                     catch (Exception ex)
                     {
@@ -79,7 +70,7 @@ public class LoginActivity extends Activity
                 String oauthVerifier = uri.getQueryParameter("oauth_verifier");
 
                 // Try identification with feedback from the Twitter validation
-                if (twitterAccountManager.tryAuthentication(oauthVerifier) == true)
+                if (TwitterAccountManager.getInstance().tryAuthentication(oauthVerifier) == true)
                 {
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     finish();
@@ -92,7 +83,7 @@ public class LoginActivity extends Activity
             catch (Exception ex)
             {
                 alert("Error: " + ex.getMessage());
-                Log.d("RHYME", "HEY: " + ex.getMessage());
+                Log.d("RHYME", "Exception: " + ex.getMessage());
             }
         }
     }
@@ -115,46 +106,11 @@ public class LoginActivity extends Activity
     }
 
     /**
-     * Thread to manage the Twitter Authentication using a loading dialog
-     * 
-     * @author vmahe
-     */
-    private class TwitterAuth extends AsyncTask<URL, Integer, Boolean>
-    {
-        @Override
-        protected void onPreExecute()
-        {
-            showDialog(DIALOG_LOADING_AUTH);
-        }
-
-        @Override
-        protected Boolean doInBackground(final URL... urls)
-        {
-            try
-            {
-                twitterAccountManager.requestAuthentication();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                alert("Error: " + ex.getMessage());
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean bool)
-        {
-            dismissDialog(DIALOG_LOADING_AUTH);
-        }
-    }
-
-    /**
      * Try to connect the user to his Twitter account
      * 
      * @return if the connexion is successful or failed
      */
-    private boolean checkForm()
+    private boolean validForm()
     {
         // Check the validity of the fields
         EditText et_login = (EditText) findViewById(R.id.edit_login);
