@@ -1,37 +1,30 @@
 package com.rhymestore.android;
 
-import android.accounts.Account;
+import java.util.Locale;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.rhymestore.android.accountsmanager.TwitterAccountManager;
 import com.rhymestore.android.rhymes.ListRhymesActivity;
 
-public class HomeActivity extends Activity
+public class HomeActivity extends Activity implements OnInitListener
 {
+    private TextToSpeech textToSpeech;
+
     @Override
     public void onCreate(final Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-        TwitterAccountManager twitterAuth = new TwitterAccountManager(this);
-        Account[] accountsList = twitterAuth.getAccountsList();
-        shortAlert("Nombre : " + accountsList.length);
-
-        for (Account currentAccount : accountsList)
-        {
-            Log.d("Rhymes", "KIKOO: " + currentAccount.name);
-        }
-
-        // Account account = new Account(username, getString(R.string.ACCOUNT_TYPE)));
-        // twitterAuth.createAccount(account);
+        textToSpeech = new TextToSpeech(this, this);
     }
 
     @Override
@@ -53,6 +46,34 @@ public class HomeActivity extends Activity
         }
 
         return false;
+    }
+
+    @Override
+    public void onInit(final int status)
+    {
+        if (status == TextToSpeech.SUCCESS)
+        {
+            int result = textToSpeech.setLanguage(new Locale("spa", "ESP"));
+
+            if (result == TextToSpeech.LANG_MISSING_DATA
+                || result == TextToSpeech.LANG_NOT_SUPPORTED)
+            {
+                shortAlert("Language is not available.");
+            }
+            else
+            {
+                rhymeSpeak("¿Tu también tienes un amigo subnormal?");
+            }
+        }
+        else
+        {
+            shortAlert("Could not initialize TextToSpeech.");
+        }
+    }
+
+    private void rhymeSpeak(final String sentence)
+    {
+        textToSpeech.speak(sentence, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     private void shortAlert(final String msg)
