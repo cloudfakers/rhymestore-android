@@ -1,8 +1,18 @@
 package com.rhymestore.android;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,10 +24,11 @@ import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import com.rhymestore.android.api.APIManager;
+import com.rhymestore.android.rhymes.Rhyme;
 
 public class HomeActivity extends Activity implements OnInitListener, OnClickListener
 {
@@ -25,7 +36,9 @@ public class HomeActivity extends Activity implements OnInitListener, OnClickLis
 
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1234;
 
-    private ListView mList;
+    private ArrayList<String> matches;
+
+    private Button mSpeakButton;
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
@@ -33,32 +46,19 @@ public class HomeActivity extends Activity implements OnInitListener, OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        // Enable TextToSpeech
         textToSpeech = new TextToSpeech(this, this);
 
-        // Get display items for later interaction
-        Button speakButton = (Button) findViewById(R.id.btn_speak);
-
-        mList = (ListView) findViewById(R.id.list);
+        mSpeakButton = (Button) findViewById(R.id.btn_speak);
 
         // Check to see if a recognition activity is present
-        PackageManager pm = getPackageManager();
-        List<ResolveInfo> activities =
-            pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
-        if (activities.size() != 0)
-        {
-            speakButton.setOnClickListener(this);
-        }
-        else
-        {
-            speakButton.setEnabled(false);
-            speakButton.setText("Recognizer not present");
-        }
+        checkRecognizerPresence();
     }
 
     /**
      * Handle the click on the start recognition button.
      */
-    public void onClick(View v)
+    public void onClick(final View v)
     {
         if (v.getId() == R.id.btn_speak)
         {
@@ -80,7 +80,7 @@ public class HomeActivity extends Activity implements OnInitListener, OnClickLis
             }
             else
             {
-                // rhymeSpeak("¿Tu también tienes un amigo subnormal?");
+                // getTheRhyme("Pillado en twitter");
             }
         }
         else
@@ -89,9 +89,31 @@ public class HomeActivity extends Activity implements OnInitListener, OnClickLis
         }
     }
 
-    private void rhymeSpeak(final String sentence)
+    /**
+     * Speech a specific rhyme
+     * 
+     * @param sentence phrase to speech
+     */
+    private void speechTheRhyme(final String sentence)
     {
         textToSpeech.speak(sentence, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    /**
+     * Get the response rhyme from API and text-to-speech it
+     */
+    private void getTheRhyme(final String text)
+    {
+        try
+        {
+            Rhyme responseRhyme = getRhymeFromAPI(text);
+            speechTheRhyme(responseRhyme.getText());
+            shortAlert(responseRhyme.getText());
+        }
+        catch (Exception ex)
+        {
+            shortAlert("Error getting the rhyme: " + ex.getMessage());
+        }
     }
 
     /**
@@ -111,16 +133,24 @@ public class HomeActivity extends Activity implements OnInitListener, OnClickLis
      * Handle the results from the recognition activity.
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data)
     {
         if (requestCode == VOICE_RECOGNITION_REQUEST_CODE && resultCode == RESULT_OK)
         {
             // Fill the list view with the strings the recognizer thought it could have heard
-            ArrayList<String> matches =
-                data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            mList.setAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                matches));
+            matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+            if (matches.size() > 0)
+            {
+                getTheRhyme(matches.get(0));
+            }
+            else
+            {
+                shortAlert("No result, try again !");
+            }
+            // mList.setAdapter(new ArrayAdapter<String>(this,
+            // android.R.layout.simple_list_item_1,
+            // matches));
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -129,5 +159,76 @@ public class HomeActivity extends Activity implements OnInitListener, OnClickLis
     private void shortAlert(final String msg)
     {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private Rhyme getRhymeFromAPI(final String text) throws Exception
+    {
+        try
+        {
+            APIManager.getInstance().setLogin("rimamelo");
+            APIManager.getInstance().setPass("R1m4mel0");
+
+            String url = APIManager.BASE_URL + "?model.rhyme=" + text;
+            InputStream in = APIManager.getInstance().sendGetRequest(url);
+            InputSource ipsrc = new InputSource(in);
+
+            // Parse the XML
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(ipsrc);
+            doc.getDocumentElement().normalize();
+
+            // Manage results from the XML to get the rhymes
+            NodeList nList = doc.getElementsByTagName("rhyme");
+
+            Node nNode = nList.item(0);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE)
+            {
+                Element eElement = (Element) nNode;
+
+                String currentValue = getTagValue("rhyme", eElement);
+                if (currentValue != null)
+                {
+                    return new Rhyme(currentValue);
+                }
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.getMessage());
+        }
+    }
+
+    private void checkRecognizerPresence()
+    {
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> activities =
+            pm.queryIntentActivities(new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+        if (activities.size() != 0)
+        {
+            mSpeakButton.setOnClickListener(this);
+        }
+        else
+        {
+            mSpeakButton.setEnabled(false);
+            mSpeakButton.setText("Recognizer not present");
+        }
+    }
+
+    /**
+     * Get the tag value of the current rhyme
+     * 
+     * @param tag Name of the tag
+     * @param element Element to check
+     * @return Value of the tag
+     */
+    private static String getTagValue(final String tag, final Element element)
+    {
+        NodeList nlList = element.getElementsByTagName(tag).item(0).getChildNodes();
+        Node nValue = nlList.item(0);
+
+        return nValue.getNodeValue();
     }
 }
