@@ -14,46 +14,22 @@ public final class R {
         public static final int icon=0x7f020000;
         public static final int icon_twitter=0x7f020001;
         public static final int icon_twitter_small=0x7f020002;
-        public static final int login_background_image=0x7f020003;
-        public static final int login_button=0x7f020004;
-        public static final int login_button_default=0x7f020005;
-        public static final int login_button_pressed=0x7f020006;
-        public static final int login_checkbox=0x7f020007;
-        public static final int login_checkbox_off=0x7f020008;
-        public static final int login_checkbox_on=0x7f020009;
-        public static final int login_frame=0x7f02000a;
-        public static final int login_textinput=0x7f02000b;
-        public static final int menu_add=0x7f02000c;
-        public static final int rimamelo=0x7f02000d;
-        public static final int splashscreen_logo=0x7f02000e;
-        public static final int titlebar_background=0x7f02000f;
+        public static final int splashscreen_logo=0x7f020003;
+        public static final int titlebar_background=0x7f020004;
     }
     public static final class id {
-        public static final int SplashScreen=0x7f07000c;
+        public static final int SplashScreen=0x7f070002;
         public static final int btn_speak=0x7f070000;
-        public static final int connexionImageButton=0x7f07000b;
-        public static final int edit_login=0x7f070006;
-        public static final int edit_pass=0x7f070008;
         public static final int list=0x7f070001;
-        public static final int login_button=0x7f07000a;
-        public static final int login_frame=0x7f070002;
-        public static final int logoImageView=0x7f07000d;
-        public static final int menu_add=0x7f07000f;
-        public static final int menu_list=0x7f07000e;
-        public static final int rememberCheckbox=0x7f070009;
-        public static final int text_login=0x7f070005;
-        public static final int text_pass=0x7f070007;
-        public static final int text_twitter=0x7f070004;
-        public static final int twitter_info=0x7f070003;
+        public static final int logoImageView=0x7f070003;
+        public static final int menu_list=0x7f070004;
     }
     public static final class layout {
         public static final int home=0x7f030000;
-        public static final int login=0x7f030001;
-        public static final int splashscreen=0x7f030002;
+        public static final int splashscreen=0x7f030001;
     }
     public static final class menu {
         public static final int home_menu=0x7f060000;
-        public static final int list_rhymes_menu=0x7f060001;
     }
     public static final class string {
         /**  Add Rhymes Activity 
